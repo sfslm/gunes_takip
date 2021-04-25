@@ -1,0 +1,138 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : Uzman Orhan AKGUN                                 *
+'*  Notice  : Copyright (c) 2011 sfslm                          *
+'*          : All Rights Reserved                               *
+'*  Date    : 17.03.2011                                        *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+TRISA=%11111111
+TRISB=%0000000
+TRISC=%00000000
+
+ADCON1 =%00000000
+
+
+PORTA=0
+PORTB=0
+PORTC=0
+
+
+
+
+
+
+
+
+Define ADC_BITS 8          
+Define ADC_CLOCK 3
+Define ADC_SAMPLEUS 50
+
+
+SUREA VAR BYTE
+LDRsag VAR WORD
+LDRsol VAR WORD
+LDRSOLHAM VAR BYTE
+LDRSAGHAM VAR BYTE
+LDR5 VAR BYTE
+SURE VAR WORD
+
+PORTB=0
+SUREA = 150 
+pause 100
+       PORTB.7=1
+       pause 2000
+       portb.7=0
+
+       pulsout PORTB.1,surea
+       SURE = surea*10
+       SURE = 19500 - SURE  
+       pauseus SURE
+BASLA:
+    
+    GOSUB SENSOR_OKU
+    GOSUB DEGER_AL
+    'lcdout $FE,1,"ham = ",#ldrsag
+    'lcdout $fe,$c0,"ham = ",#ldrsol," ",dec3 surea
+     if ldrsol < ldrsag  THEN gosub SOLA
+     pause 100
+    IF ldrsol > ldrsag  THEN gosub SAGA
+    'pause 100                                                
+    goto basla
+    
+ sola:
+    
+    surea=surea-1
+    if surea < 2 then
+      surea =1
+      endif
+    pulsout PORTB.1,surea
+    SURE = surea*10
+    SURE = 19500 - SURE  
+    pauseus SURE
+    return
+ saga:
+    
+    surea=surea+1
+    if surea > 253 then 
+       surea=254
+       endif
+    pulsout PORTB.1,surea
+    SURE = surea*10
+    SURE = 19500 - SURE  
+    pauseus SURE
+    return   
+
+                 
+
+   
+SENSOR_OKU:
+         
+         ADCIN 0,LDRSOL  '0 nolu kanaldan Analog deðeri oku v
+         PAUSEUS 50
+         ADCIN 1,LDRSAG  '1 nolu kanaldan Analog deðeri oku 
+         PAUSEUS 50
+         RETURN
+DEGER_AL:
+         IF 0< LDRSOL AND LDRSOL =< 15 THEN   LDRSOL=15  
+         IF 15 < LDRSOL AND LDRSOL =<30 THEN    LDRSOL=30
+         IF 30 < LDRSOL AND LDRSOL =<45 THEN    LDRSOL=45
+         IF 45 < LDRSOL AND LDRSOL =<60 THEN    LDRSOL=60
+         IF 60 < LDRSOL AND LDRSOL =<75 THEN    LDRSOL=75
+         IF 75 < LDRSOL AND LDRSOL =<90 THEN    LDRSOL=90
+         IF 90 < LDRSOL AND LDRSOL =<105 THEN    LDRSOL=105
+         IF 105 < LDRSOL AND LDRSOL=<120 THEN    LDRSOL=120
+         IF 120 < LDRSOL AND LDRSOL =<135 THEN    LDRSOL=135
+         IF 135 < LDRSOL AND LDRSOL =<150 THEN    LDRSOL=150
+         IF 150 < LDRSOL AND LDRSOL =<165 THEN    LDRSOL=165
+         IF 165 < LDRSOL AND LDRSOL =<180 THEN    LDRSOL=180
+         IF 180 < LDRSOL AND LDRSOL =<195 THEN    LDRSOL=195
+         IF 195 < LDRSOL AND LDRSOL =<210 THEN    LDRSOL=210
+         IF 210 < LDRSOL AND LDRSOL =<225 THEN    LDRSOL=225
+         IF 225 < LDRSOL AND LDRSOL =<240 THEN    LDRSOL=240
+         IF 240 < LDRSOL AND LDRSOL =<256 THEN    LDRSOL=256
+         
+         IF 0 < LDRSAG AND LDRSAG =< 15 THEN     LDRSAG=15
+         IF 15 < LDRSAG AND LDRSAG =<30 THEN     LDRSAG=30
+         IF 30 < LDRSAG AND LDRSAG =<45 THEN     LDRSAG=45
+         IF 45 < LDRSAG AND LDRSAG =<60 THEN     LDRSAG=60
+         IF 60 < LDRSAG AND LDRSAG =<75 THEN     LDRSAG=75
+         IF 75 < LDRSAG AND LDRSAG =<90 THEN      LDRSAG=90
+         IF 90 < LDRSAG AND LDRSAG =<105 THEN     LDRSAG=105
+         IF 105 < LDRSAG AND LDRSAG =<120 THEN    LDRSAG=120
+         IF 120 < LDRSAG AND LDRSAG =<135 THEN    LDRSAG=135
+         IF 135 < LDRSAG AND LDRSAG =<150 THEN    LDRSAG=150
+         IF 150 < LDRSAG AND LDRSAG =<165 THEN    LDRSAG=165
+         IF 165 < LDRSAG AND LDRSAG =<180 THEN    LDRSAG=180
+         IF 180 < LDRSAG AND LDRSAG =<195 THEN    LDRSAG=195
+         IF 195 < LDRSAG AND LDRSAG =<210 THEN    LDRSAG=210
+         IF 210 < LDRSAG AND LDRSAG =<225 THEN    LDRSAG=225
+         IF 225 < LDRSAG AND LDRSAG =<240 THEN    LDRSAG=240
+         IF 240 < LDRSAG AND LDRSAG =<256 THEN    LDRSAG=256     
+        
+        RETURN
+      end
+  
+
